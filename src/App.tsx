@@ -1,6 +1,6 @@
 import React from 'react'
 import './App.css';
-import WeatherPage from './components/CardCity';
+import WeatherPage from './components/CityCard/CardCity';
 
 function App() {
   return (

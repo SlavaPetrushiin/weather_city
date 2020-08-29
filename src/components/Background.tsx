@@ -4,7 +4,7 @@ import weatherBg from '../img/graphic.png';
 const Background = () => {
 	return (
 		<div className="weather-bg">
-			<img src={weatherBg} alt="" />
+			<img src={weatherBg} alt="bg" />
 		</div>
 	)
 }

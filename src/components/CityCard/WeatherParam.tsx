@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import humidity from '../img/humidity.png';
-import barometer from '../img/barometer.png'
-import wind from '../img/wind.png';
-import vector from '../img/vector.png';
-import cloud from '../img/vector_cloud.png';
-import clock from '../img/sand-clock.png';
-import sunrise from '../img/sunrise.png';
-import sunset from '../img/sunset.png';
+import React from 'react';
+import humidity from '../../img/humidity.png';
+import barometer from '../../img/barometer.png'
+import wind from '../../img/wind.png';
+import vector from '../../img/vector.png';
+import cloud from '../../img/vector_cloud.png';
+import clock from '../../img/sand-clock.png';
+import sunrise from '../../img/sunrise.png';
+import sunset from '../../img/sunset.png';
 import { ITemperatureChange } from './CardCity';
 
 type IProps = {
 	name: string
-	description: string | boolean | undefined | ITemperatureChange
+	description: string | boolean | undefined | number | ITemperatureChange
 }
 
 const WeatherParam = (props: IProps) => {

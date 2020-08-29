@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import WeatherParam from './WeatherParam';
-import Background from './Background';
+import Background from '../Background';
 import Title from './Title';
+import { dateСonversion } from '../../utilites/dateСonversion';
 
 export type ITemperatureChange = {
-	temp_min: string
-	temp_max: string
+	temp_min: number
+	temp_max: number
 }
 
 type IState = {
 	success: boolean
 	description: undefined | string
-	temperature: undefined | string
+	temperature: undefined | number
 	temperatureChange: undefined | ITemperatureChange
 	city: undefined | string
 	country: undefined | string
@@ -45,16 +46,16 @@ const CardCity = () => {
 
 	useEffect(() => {
 		const dataWeather = async () => {
-			const result = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=Minsk,Belarus&appid=${process.env.REACT_APP_NOT_SECRET_CODE}&units=metric`);
+			const result = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=Washington,USA&appid=${process.env.REACT_APP_NOT_SECRET_CODE}&units=metric`);
 			const data = await result.json();
 
 			const newData = {
 				success: true,
 				description: data.weather[0].description,
-				temperature: data.main.temp,
+				temperature: Math.round(data.main.temp),
 				temperatureChange: {
-					temp_min: data.main.temp_min,
-					temp_max: data.main.temp_max
+					temp_min: Math.round(data.main.temp_min),
+					temp_max: Math.round(data.main.temp_max)
 				},
 				city: data.name,
 				country: data.sys.country,
@@ -75,26 +76,6 @@ const CardCity = () => {
 
 		dataWeather();
 	}, [])
-
-	const dateСonversion = (value: any) => {
-		let months = [
-			'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-		]
-		let days = [
-			'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
-		];
-
-		let date = new Date(+value * 1000);
-		let hour = date.getHours();
-		let minute = date.getMinutes();
-		let day = days[date.getDay()];
-		let month = months[date.getMonth()];
-		let year = date.getFullYear();
-
-		console.log(day, month, hour, minute, year);
-
-		return {day, month, year, hour, minute}
-	}
 
 	const renderWeatherParams = () => {
 		let keys = (Object.keys(state) as Array<keyof IState>).map(key => key);
