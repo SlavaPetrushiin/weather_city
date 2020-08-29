@@ -29,6 +29,7 @@ img{
 	position: absolute;
 	left: 0px;
 	top: 270px;
+	min-height: 300px;
 	border-top-left-radius: 20px;
 	border-top-right-radius: 20px;
 	width: 100%;

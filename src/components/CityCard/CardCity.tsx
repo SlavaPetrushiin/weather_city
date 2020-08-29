@@ -86,17 +86,15 @@ const CardCity = () => {
 	}
 
 	return (
-		<div className="container">
-			<div className="weather">
-				<Background />
-				<div className="weather-info">
-					<Title city={state.city} country={state.country} date={dateСonversion(state.dt)}/>
-					<div className="weather-descriptions">
-						{!!state.success && renderWeatherParams()}
-					</div>
+		<>
+			<Background />
+			<div className="weather-info">
+				<Title city={state.city} country={state.country} date={dateСonversion(state.dt)} />
+				<div className="weather-descriptions">
+					{!!state.success && renderWeatherParams()}
 				</div>
 			</div>
-		</div>
+		</>
 	)
 }
 
