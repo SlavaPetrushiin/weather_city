@@ -1,7 +1,7 @@
 import React from 'react'
 import './App.css';
 import CardCity from './components/CityCard/CardCity';
-import Search from './components/Search/Search';
+import Search from './components/SearchCity/Search';
 
 function App() {
 	return (
@@ -9,6 +9,7 @@ function App() {
 			<div className="container">
 				<div className="weather">
 					<Search />
+					
 				</div>
 			</div>
     </div >
@@ -17,4 +18,4 @@ function App() {
 
 export default App;
 
-//					<CardCity />
+//						<CardCity />				

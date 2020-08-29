@@ -7,7 +7,8 @@ import cloud from '../../img/vector_cloud.png';
 import clock from '../../img/sand-clock.png';
 import sunrise from '../../img/sunrise.png';
 import sunset from '../../img/sunset.png';
-import { ITemperatureChange } from './CardCity';
+import { ITemperatureChange } from '../../store/weatherCity';
+
 
 type IProps = {
 	name: string
