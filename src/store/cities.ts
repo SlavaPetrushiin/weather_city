@@ -8,6 +8,7 @@ import { favoriteCitySort } from '../utilites/favoriteCitySort';
 export type ICity = {
 	city: string
 	country: string
+	temperature: number
 }
 
 type IFetchCitySuccess = {
@@ -41,7 +42,8 @@ const cities = (state: IInitialState = initialState, action: IAllTypes): IInitia
 		case CITY_SELECTED_SUCCESS: {
 			return {
 				...state,
-				favourites: [...action.favourites]
+				favourites: [...action.favourites],
+				cities: []
 			}
 		}
 		default: {
@@ -73,7 +75,7 @@ export const findCity = (letters: string): IThunk => async (dispatch) => {
 		let result = await fetchWeatherCity.findCity(letters);
 		let cities = result.data.list;
 		let citiesAndCountry = cities.map((city: any) => {
-			return { city: city.name, country: city.sys.country }
+			return { city: city.name, country: city.sys.country, temperature: Math.round(city.main.temp)}
 		})
 
 		dispatch(fetchFindCitySuccess(citiesAndCountry))

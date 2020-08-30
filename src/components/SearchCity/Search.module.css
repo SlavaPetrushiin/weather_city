@@ -17,6 +17,7 @@
 }
 
 .search .typeahead input{
+	position: relative;
 	color: #000000;
 	box-sizing: border-box;
 	display: block;
@@ -31,13 +32,16 @@
 
 .search .typeahead ul{
 	position: absolute;
-	list-style-type: none;
-	padding-left: 0;
-	margin-left: 0;
+	top: 91px;
+	left: 20px;
+	right: 20px;
+	margin: 0;
+	background: #ffffff;
 }
 
 .search .typeahead ul li{
 	color: #000000;
 	border: 1px solid #bebebe;
 	padding: 7px;
+	border-top: none;
 }
