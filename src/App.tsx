@@ -4,6 +4,7 @@ import CardCity from './components/CityCard/CardCity';
 import Search from './components/SearchCity/Search';
 import { useDispatch } from 'react-redux';
 import { getLocalFavoritesCities } from './store/cities';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 function App() {
 	const dispatch = useDispatch();
@@ -12,11 +13,19 @@ function App() {
 		dispatch(getLocalFavoritesCities());
 	}, [])
 
+	let routes = (
+		<Switch>
+			<Route exact path='/' component={Search} />
+			<Route exact path='/weather' component={CardCity} />
+			<Redirect to="/" />
+		</Switch>
+	);
+
 	return (
 		<div className="App">
 			<div className="container">
 				<div className="weather">
-					<Search />
+					{routes}
 				</div>
 			</div>
     </div >
@@ -25,4 +34,4 @@ function App() {
 
 export default App;
 
-//						<CardCity />				
+		
