@@ -1,7 +1,7 @@
 import { RootState } from './store';
 import { ThunkAction } from 'redux-thunk';
 import { FETCH_WEATHER_SUCCESS } from './type';
-import fetchWeatherCity from '../api/fetchWeatherCity';
+import fetchWeatherCity from '../api/fetchWeatherCityApi';
 import { dateСonversion } from '../utilites/dateСonversion';
 
 export type ITemperatureChange = {

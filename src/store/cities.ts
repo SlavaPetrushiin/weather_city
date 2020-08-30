@@ -1,14 +1,15 @@
-import { useDispatch } from 'react-redux';
 import { RootState } from './store';
+import { v4 as uuidv4 } from 'uuid';
 import { ThunkAction } from 'redux-thunk';
 import { FETCH_CITY_SUCCESS, CITY_SELECTED_SUCCESS } from "./type"
-import fetchWeatherCity from "../api/fetchWeatherCity"
+import fetchWeatherCity from "../api/fetchWeatherCityApi"
 import { favoriteCitySort } from '../utilites/favoriteCitySort';
 
 export type ICity = {
 	city: string
 	country: string
 	temperature: number
+	id: string
 }
 
 type IFetchCitySuccess = {
@@ -74,8 +75,13 @@ export const findCity = (letters: string): IThunk => async (dispatch) => {
 	try {
 		let result = await fetchWeatherCity.findCity(letters);
 		let cities = result.data.list;
-		let citiesAndCountry = cities.map((city: any) => {
-			return { city: city.name, country: city.sys.country, temperature: Math.round(city.main.temp)}
+		let citiesAndCountry = cities.map((city: any): ICity => {
+			return { 
+				city: city.name,
+				country: city.sys.country,
+				temperature: Math.round(city.main.temp),
+				id: uuidv4()
+			}
 		})
 
 		dispatch(fetchFindCitySuccess(citiesAndCountry))
