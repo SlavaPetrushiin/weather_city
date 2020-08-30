@@ -8,7 +8,7 @@ import clock from '../../img/sand-clock.png';
 import sunrise from '../../img/sunrise.png';
 import sunset from '../../img/sunset.png';
 import { ITemperatureChange } from '../../store/weatherCity';
-
+import classes from './CardCity.module.css';
 
 type IProps = {
 	name: string
@@ -58,7 +58,7 @@ const WeatherParam = (props: IProps) => {
 			break;
 		}
 		case "temperature": {
-			cls.push("degrees");
+			cls.push(`${classes.degrees}`);
 			break;
 		}
 		default: {
@@ -66,23 +66,32 @@ const WeatherParam = (props: IProps) => {
 		}
 	}
 
+	let desc = typeof props.description !== 'object'
+		? <>{props.description} {!!unit && unit}</>
+		: (
+			<div className={classes.changeTemp}>
+				<span>
+					{`${props.description.temp_max}`}&#176;C&uarr;
+				</span>
+				<span>
+					{`${props.description.temp_min}`}&#176;C&darr;
+				</span>
+			</div>
+		)
 
-	let desc = typeof props.description !==  'object' 
-		? props.description
-		: `${props.description.temp_max} ${props.description.temp_min}`
+	let tem = props.name === 'temperature'
+		? <span className={cls.join(' ')}>{desc}<span className={classes.tem}>&#176;C</span></span>
+		: <>{desc}</>
 
 	return (
-		<div className="weather-description">
+		<div className={classes.weatherDescription}>
 			{
-				props.name !== "temperature" && <span className="blockIconImg">
+				props.name !== 'temperature' && typeof props.description !== 'object' && <span className={classes.blockIconImg}>
 					<img src={iconSrc} />
 				</span>
 			}
-
-			<span className={cls.join(' ')}>{desc} {!!unit && unit}</span>
-			{
-				props.name !== "temperature" && <span>{props.name}</span>
-			}
+			{tem}
+			{props.name !== 'temperature' && typeof props.description !== 'object' && <span className={classes.des}>{props.name}</span>}
 		</div>
 	)
 }

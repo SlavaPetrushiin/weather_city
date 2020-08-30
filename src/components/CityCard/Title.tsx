@@ -1,5 +1,6 @@
 import React from 'react';
 import places from '../../img/places.png';
+import classes from './CardCity.module.css';
 
 type IDate = {
 	day: string
@@ -18,7 +19,7 @@ type IProps = {
 
 const Title = ({city, country, date}: IProps) => {
 	return (
-		<div className="weather-title">
+		<div className={classes.weatherTitle}>
 		<p>{`${date?.day}, ${date?.numberOfMonths} ${date?.month} ${date?.year} | ${date?.hour}:${date?.minute}`}</p>
 		<p>{city}, {country}
 			<span>

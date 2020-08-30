@@ -6,6 +6,7 @@ import { dateСonversion } from '../../utilites/dateСonversion';
 import { fetchGetWeatherCity, IStateWeather } from '../../store/weatherCity';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
+import classes from './CardCity.module.css';
 
 const CardCity = (props: any) => {
 	const params = props.match.params;
@@ -30,9 +31,9 @@ const CardCity = (props: any) => {
 	return (
 		<>
 			<Background />
-			<div className="weather-info">
+			<div className={classes.weatherInfo}>
 				<Title city={state.city} country={state.country} date={dateСonversion(state.dt)} />
-				<div className="weather-descriptions">
+				<div className={classes.weatherDescriptions}>
 					{!!state.success && renderWeatherParams()}
 				</div>
 			</div>
