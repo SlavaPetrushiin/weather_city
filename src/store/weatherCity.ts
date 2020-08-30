@@ -77,10 +77,10 @@ const fetchWeatherCitySuccess = (data: IStateWeather): IFetchWeatherSuccess => {
 
 export const fetchGetWeatherCity = (city: string = 'LA', country: string = 'USA'): IThunk => async(dispatch) => {
 	try{
-		const result = await fetchWeatherCity.getWeatherCity(city, country);
-		const data = result.data;
+		let result = await fetchWeatherCity.getWeatherCity(city, country);
+		let data = result.data;
 
-		const newData = {
+		let newData = {
 			success: true,
 			description: data.weather[0].description,
 			temperature: Math.round(data.main.temp),
