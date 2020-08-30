@@ -1,3 +1,5 @@
+import { ICity } from "../store/cities";
+
 const storageApi = {
 	KEYS: {
 		favorites: "favorites"
@@ -12,7 +14,7 @@ const storageApi = {
 		return favorites;
 	},
 
-	saveFavorites(favorite: any) {
+	saveFavorites(favorite: ICity) {
 		if (!!this.getFavorites()) {
 			const favorites = this.getFavorites();
 			const newFavorites = [...favorites, favorite];

@@ -1,18 +1,28 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ICity } from '../../store/cities';
+//@ts-ignore
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import classes from './ListCities.module.css';
 
 type IProps = {
 	favoritesCities: Array<ICity>
+	removeFavoriteCity: (id: string) => void
 }
 
-const ListCities = ({favoritesCities}: IProps) => {
+const ListCities = ({favoritesCities, removeFavoriteCity}: IProps) => {
 	const renderFavoritesCities = (favoritesCities: Array<ICity>) => {
 		return favoritesCities.map((favorite: ICity) => {
 			return (
-				<li className={classes.listItem}>
+				<li className={classes.listItem} key={favorite.id}>
 					<span>{`${favorite.city}, ${favorite.country}`}</span>
-					<span>{`${favorite.temperature}`}&#176;C</span>
+					<span>
+						<span className={classes.temperature}>{`${favorite.temperature}`}&#176;C</span>
+						<FontAwesomeIcon 
+							icon={faTrash}
+							onClick={() => removeFavoriteCity(favorite.id)}
+						/>
+					</span>
 				</li>
 			)
 		})

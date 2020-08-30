@@ -16,3 +16,6 @@
 .listItem:hover{
 	background: #ECF7FD;	
 }
+.listItem .temperature{
+	margin-right: 10px;	
+}
