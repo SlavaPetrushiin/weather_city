@@ -11,7 +11,7 @@ import ListCities from '../ListCities/ListCities';
 const Search = () => {
 	const dispatch = useDispatch();
 	const [value, setValue] = useState('');
-	const foundCities = useSelector((state: RootState) => state.cities.cities);
+	const foundCities = useSelector((state: RootState) => state.cities.foundCities);
 	const favoritesCities = useSelector((state: RootState) => state.cities.favorites);
 	const citiesForTypeahead = foundCities.map((city: any) => `${city.city}, ${city.country}`);
 

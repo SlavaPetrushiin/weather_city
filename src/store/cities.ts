@@ -15,7 +15,7 @@ export type ICity = {
 
 type IFetchCitySuccess = {
 	type: typeof FETCH_CITY_SUCCESS
-	cities: Array<ICity> | []
+	foundCities: Array<ICity> | []
 }
 
 type ICitySelectedSuccess = {
@@ -29,7 +29,7 @@ type IGetLocalCitiesSuccess = {
 }
 
 type IInitialState = {
-	cities: Array<ICity>
+	foundCities: Array<ICity>
 	favorites: Array<ICity>
 }
 
@@ -41,7 +41,7 @@ type IAllTypes =
 export type IThunk = ThunkAction<void, RootState, unknown, IAllTypes>
 
 const initialState: IInitialState = {
-	cities: [],
+	foundCities: [],
 	favorites: []
 };
 
@@ -50,21 +50,21 @@ const cities = (state: IInitialState = initialState, action: IAllTypes): IInitia
 		case FETCH_CITY_SUCCESS: {
 			return {
 				...state,
-				cities: [...action.cities]
+				foundCities: [...action.foundCities]
 			}
 		}
 		case CITY_SELECTED_SUCCESS: {
 			return {
 				...state,
 				favorites: [...action.favorites],
-				cities: []
+				foundCities: []
 			}
 		}
 		case GET_LOCAL_CITY_SUCCESS: {
 			return {
 				...state,
 				favorites: [...action.favorites],
-				cities: []
+				foundCities: []
 			}
 		}
 		default: {
@@ -80,10 +80,10 @@ const citySelectedSuccess = (favorites: Array<ICity>): ICitySelectedSuccess => {
 	}
 }
 
-const fetchFindCitySuccess = (cities: any): IFetchCitySuccess => {
+const fetchFindCitySuccess = (foundCities: Array<ICity>): IFetchCitySuccess => {
 	return {
 		type: FETCH_CITY_SUCCESS,
-		cities
+		foundCities
 	}
 }
 
@@ -117,7 +117,7 @@ export const findCity = (letters: string): IThunk => async (dispatch) => {
 export const updateFavoritesCities = (city: string): IThunk => async (dispatch, getState) => {
 	try {
 		let flag = false;
-		let findCities = getState().cities.cities;
+		let findCities = getState().cities.foundCities;
 		let favoritesCities = getState().cities.favorites;
 		let favoriteCity = city.split(',');
 		let favorite = findCities.filter((c: ICity) => {

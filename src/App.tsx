@@ -15,8 +15,8 @@ function App() {
 
 	let routes = (
 		<Switch>
-			<Route exact path='/' component={Search} />
-			<Route exact path='/weather' component={CardCity} />
+			<Route  exact path='/' component={Search} />
+			<Route path='/weather/:city/:country' component={CardCity} />
 			<Redirect to="/" />
 		</Switch>
 	);
@@ -33,5 +33,3 @@ function App() {
 }
 
 export default App;
-
-		

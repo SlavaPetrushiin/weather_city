@@ -5,12 +5,20 @@
 .listItem{
 	display: flex;
 	justify-content: space-between;
+	align-items: center;
+}
+
+.itemLink{
+	text-decoration: none;
+	display: flex;
+	justify-content: space-between;
 	padding: 9px;
 	font-weight: 500;
 	font-size: 18px;
 	line-height: 22px;
 	color: #444444;
-	transition: all .3s;	
+	width: 100%;
+	transition: all .3s;
 }
 
 .listItem:hover{

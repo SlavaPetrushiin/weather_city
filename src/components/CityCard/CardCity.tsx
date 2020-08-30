@@ -7,13 +7,14 @@ import { fetchGetWeatherCity, IStateWeather } from '../../store/weatherCity';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 
-const CardCity = () => {
+const CardCity = (props: any) => {
+	const params = props.match.params;
 	const dispatch = useDispatch();
 	const state = useSelector((state: RootState) => state.card)
 
 	useEffect(() => {
 		(async () => {
-			dispatch(fetchGetWeatherCity())
+			dispatch(fetchGetWeatherCity(params.city, params.country))
 		})()
 
 	}, [])
