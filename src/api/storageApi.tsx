@@ -14,11 +14,9 @@ const storageApi = {
 		return favorites;
 	},
 
-	saveFavorites(favorite: ICity) {
+	saveFavorites(favoritesCities: Array<ICity>) {
 		if (!!this.getFavorites()) {
-			const favorites = this.getFavorites();
-			const newFavorites = [...favorites, favorite];
-			localStorage.setItem(this.KEYS.favorites, JSON.stringify(newFavorites));
+			localStorage.setItem(this.KEYS.favorites, JSON.stringify(favoritesCities));
 		}
 	},
 

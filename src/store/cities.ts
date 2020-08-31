@@ -156,7 +156,7 @@ export const updateFavoritesCities = (city: string): IThunk => async (dispatch, 
 
 		let newFavoritesCities = favoritesCities.concat(favorite).sort(favoriteCitySort);
 		dispatch(citySelectedSuccess(newFavoritesCities));
-		storageApi.saveFavorites(favorite[0]);
+		storageApi.saveFavorites(newFavoritesCities);
 	}
 	catch (e) {
 		console.log(e)
