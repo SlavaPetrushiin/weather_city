@@ -14,9 +14,10 @@ type IProps = {
 const ListCities = ({ favoritesCities, removeFavoriteCity }: IProps) => {
 	const renderFavoritesCities = (favoritesCities: Array<ICity>) => {
 		return favoritesCities.map((favorite: ICity) => {
+			debugger
 			return (
 				<li className={classes.listItem} key={favorite.id}>
-					<Link to={`/weather/${favorite.city}/${favorite.country}`} className={classes.itemLink}>
+					<Link to={`/weather?city=${favorite.city}&country=${favorite.country}&lat=${favorite.lat}&lon=${favorite.lon}`} className={classes.itemLink}>
 						<span>{`${favorite.city}, ${favorite.country}`}</span>
 						<span className={classes.temperature}>{`${favorite.temperature}`}&#176;C</span>
 					</Link>

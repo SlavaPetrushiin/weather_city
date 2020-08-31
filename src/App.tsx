@@ -16,7 +16,7 @@ function App() {
 	let routes = (
 		<Switch>
 			<Route  exact path='/' component={Search} />
-			<Route path='/weather/:city/:country' component={CardCity} />
+			<Route path='/weather' component={CardCity} />
 			<Redirect to="/" />
 		</Switch>
 	);

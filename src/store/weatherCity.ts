@@ -9,6 +9,10 @@ export type ITemperatureChange = {
 	temp_max: number
 }
 
+export type IDaily = {
+
+}
+
 export type IStateWeather = {
 	success: boolean
 	description: undefined | string
@@ -73,41 +77,43 @@ const fetchWeatherCitySuccess = (data: IStateWeather): IFetchWeatherSuccess => {
 	}
 }
 
-
-
-export const fetchGetWeatherCity = (city: string, country: string): IThunk => async(dispatch) => {
+export const fetchGetWeatherCity = (city: string, country: string, lat: string, lon: string) : IThunk => async(dispatch) => {
 	try{
-		let result = await fetchWeatherCity.getWeatherCity(city, country);
-		let data = result.data;
+		let result = await Promise.all([
+			fetchWeatherCity.getWeatherCity(city, country),
+			fetchWeatherCity.getDailyWeatherCity(lat, lon),
+		]);
 
-		let newData = {
+		let current = result[0].data;
+		let daily = result[1].data;
+
+		debugger
+
+		let newCurrent = {
 			success: true,
-			description: data.weather[0].description,
-			temperature: Math.round(data.main.temp),
+			description: current.weather[0].description,
+			temperature: Math.round(current.main.temp),
 			temperatureChange: {
-				temp_min: Math.round(data.main.temp_min),
-				temp_max: Math.round(data.main.temp_max)
+				temp_min: Math.round(current.main.temp_min),
+				temp_max: Math.round(current.main.temp_max)
 			},
-			city: data.name,
-			country: data.sys.country,
-			humidity: data.main.humidity,
-			pressure: data.main.pressure,
-			wind: data.wind.speed,
-			sunrise: `${dateСonversion(data.sys.sunrise).hour}:${dateСonversion(data.sys.sunrise).minute}`,
-			sunset: `${dateСonversion(data.sys.sunset).hour}:${dateСonversion(data.sys.sunset).minute}`,
-			daytime: `${dateСonversion(data.dt).hour}:${dateСonversion(data.dt).minute}`,
-			dt: data.dt,
+			city: current.name,
+			country: current.sys.country,
+			humidity: current.main.humidity,
+			pressure: current.main.pressure,
+			wind: current.wind.speed,
+			sunrise: `${dateСonversion(current.sys.sunrise).hour}:${dateСonversion(current.sys.sunrise).minute}`,
+			sunset: `${dateСonversion(current.sys.sunset).hour}:${dateСonversion(current.sys.sunset).minute}`,
+			daytime: `${dateСonversion(current.dt).hour}:${dateСonversion(current.dt).minute}`,
+			dt: current.dt,
 			error: undefined
 		}
 
-		dispatch(fetchWeatherCitySuccess(newData));
+		dispatch(fetchWeatherCitySuccess(newCurrent));
 	}
 	catch(e){
-
+		console.log(e)
 	}
 }
-
-
-
 
 export default weatherCity;

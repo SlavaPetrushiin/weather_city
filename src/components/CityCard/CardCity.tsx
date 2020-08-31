@@ -7,15 +7,17 @@ import { fetchGetWeatherCity, IStateWeather } from '../../store/weatherCity';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import classes from './CardCity.module.css';
+import { getParamsUrl } from '../../utilites/getParamsUrl';
 
 const CardCity = (props: any) => {
-	const params = props.match.params;
+	const params = props.location.search;
 	const dispatch = useDispatch();
-	const weather = useSelector((state: RootState) => state.card)
-
+	const weather = useSelector((state: RootState) => state.card);
+	const paramsUrl = getParamsUrl(params);
+	
 	useEffect(() => {
 		(async () => {
-			dispatch(fetchGetWeatherCity(params.city, params.country))
+			dispatch(fetchGetWeatherCity(paramsUrl.city, paramsUrl.country, paramsUrl.lat, paramsUrl.lon));
 		})()
 
 	}, [])
@@ -40,9 +42,7 @@ const CardCity = (props: any) => {
 						</div>
 					</>
 					: <p>Loading!</p>
-
 				}
-
 			</div>
 		</>
 	)

@@ -7,7 +7,6 @@ import { findCity, updateFavoritesCities, removeLocalFavoriteCity } from '../../
 import { RootState } from '../../store/store';
 import ListCities from '../ListCities/ListCities';
 
-
 const Search = () => {
 	const dispatch = useDispatch();
 	const [value, setValue] = useState('');

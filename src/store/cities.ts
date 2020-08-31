@@ -11,6 +11,8 @@ export type ICity = {
 	country: string
 	temperature: number
 	id: string
+	lat?: number
+	lon?: number
 }
 
 type IFetchCitySuccess = {
@@ -130,7 +132,9 @@ export const findCity = (letters: string): IThunk => async (dispatch) => {
 				city: city.name,
 				country: city.sys.country,
 				temperature: Math.round(city.main.temp),
-				id: uuidv4()
+				id: uuidv4(),
+				lat: city.coord.lat,
+				lon: city.coord.lon
 			}
 		})
 
