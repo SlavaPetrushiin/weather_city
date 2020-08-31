@@ -11,9 +11,9 @@ import ListCities from '../ListCities/ListCities';
 const Search = () => {
 	const dispatch = useDispatch();
 	const [value, setValue] = useState('');
-	const foundCities = useSelector((state: RootState) => state.cities.foundCities);
+	const foundCities = useSelector((state: RootState) => state.cities);
 	const favoritesCities = useSelector((state: RootState) => state.cities.favorites);
-	const citiesForTypeahead = foundCities.map((city: any) => `${city.city}, ${city.country}`);
+	const citiesForTypeahead = foundCities.foundCities.map((city: any) => `${city.city}, ${city.country}`);
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setValue(e.currentTarget.value);
@@ -25,7 +25,7 @@ const Search = () => {
 		}
 	};
 
-	const handleOptionSelected = async (city: any) => {
+	const handleOptionSelected = (city: any) => {
 		dispatch(updateFavoritesCities(city));
 	}
 
@@ -36,8 +36,11 @@ const Search = () => {
 	return (
 		<div className={classes.search}>
 			<Background />
-			<div className='weather-info'>
+			<div className={classes.searchInfo}>
 				<h5>Location</h5>
+				{
+					!!foundCities.error && <p className={classes.error}>{foundCities.message}</p>
+				}
 				<Typeahead
 					className={classes.typeahead}
 					options={[...citiesForTypeahead]}

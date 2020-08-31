@@ -1,7 +1,7 @@
 import { RootState } from './store';
 import { v4 as uuidv4 } from 'uuid';
 import { ThunkAction } from 'redux-thunk';
-import { FETCH_CITY_SUCCESS, CITY_SELECTED_SUCCESS, GET_LOCAL_CITY_SUCCESS } from "./type";
+import { FETCH_CITY_SUCCESS, CITY_SELECTED_SUCCESS, GET_LOCAL_CITY_SUCCESS, FETCH_CITY_ERROR } from "./type";
 import fetchWeatherCity from '../api/fetchWeatherCityApi';
 import { favoriteCitySort } from '../utilites/favoriteCitySort';
 import storageApi from '../api/storageApi';
@@ -18,6 +18,10 @@ type IFetchCitySuccess = {
 	foundCities: Array<ICity> | []
 }
 
+type IFetchCityError = {
+	type: typeof FETCH_CITY_ERROR
+}
+
 type ICitySelectedSuccess = {
 	type: typeof CITY_SELECTED_SUCCESS
 	favorites: Array<ICity>
@@ -31,10 +35,13 @@ type IGetLocalCitiesSuccess = {
 type IInitialState = {
 	foundCities: Array<ICity>
 	favorites: Array<ICity>
+	error: boolean
+	message: string
 }
 
 type IAllTypes = 
-	IFetchCitySuccess 
+	IFetchCitySuccess
+	| IFetchCityError
 	| ICitySelectedSuccess
 	| IGetLocalCitiesSuccess
 
@@ -42,7 +49,9 @@ export type IThunk = ThunkAction<void, RootState, unknown, IAllTypes>
 
 const initialState: IInitialState = {
 	foundCities: [],
-	favorites: []
+	favorites: [],
+	error: false,
+	message: "Enter the correct name"
 };
 
 const cities = (state: IInitialState = initialState, action: IAllTypes): IInitialState => {
@@ -50,7 +59,14 @@ const cities = (state: IInitialState = initialState, action: IAllTypes): IInitia
 		case FETCH_CITY_SUCCESS: {
 			return {
 				...state,
+				error: false,
 				foundCities: [...action.foundCities]
+			}
+		}
+		case FETCH_CITY_ERROR: {
+			return {
+				...state,
+				error: true,
 			}
 		}
 		case CITY_SELECTED_SUCCESS: {
@@ -87,6 +103,12 @@ const fetchFindCitySuccess = (foundCities: Array<ICity>): IFetchCitySuccess => {
 	}
 }
 
+const fetchFindCityError = (): IFetchCityError => {
+	return {
+		type: FETCH_CITY_ERROR,
+	}
+}
+
 const getLocalCitiesSuccess = (favorites: Array<ICity>): IGetLocalCitiesSuccess => {
 	return {
 		type: GET_LOCAL_CITY_SUCCESS,
@@ -98,6 +120,11 @@ export const findCity = (letters: string): IThunk => async (dispatch) => {
 	try {
 		let result = await fetchWeatherCity.findCity(letters);
 		let cities = result.data.list;
+		if(cities.length === 0) {
+			dispatch(fetchFindCityError());
+			return
+		}
+
 		let citiesAndCountry = cities.map((city: any): ICity => {
 			return { 
 				city: city.name,

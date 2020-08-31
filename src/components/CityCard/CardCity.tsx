@@ -11,7 +11,7 @@ import classes from './CardCity.module.css';
 const CardCity = (props: any) => {
 	const params = props.match.params;
 	const dispatch = useDispatch();
-	const state = useSelector((state: RootState) => state.card)
+	const weather = useSelector((state: RootState) => state.card)
 
 	useEffect(() => {
 		(async () => {
@@ -21,9 +21,9 @@ const CardCity = (props: any) => {
 	}, [])
 
 	const renderWeatherParams = () => {
-		let keys = (Object.keys(state) as Array<keyof IStateWeather>).map(key => key);
+		let keys = (Object.keys(weather) as Array<keyof IStateWeather>).map(key => key);
 		let keysForRender = keys.filter((key) => key !== "success" && key !== "city" && key !== "country" && key !== "error" && key !== "dt");
-		let resultParams = keysForRender.map(key => <WeatherParam key={key} name={key} description={state[key]} />);
+		let resultParams = keysForRender.map(key => <WeatherParam key={key} name={key} description={weather[key]} />);
 
 		return resultParams;
 	}
@@ -32,10 +32,17 @@ const CardCity = (props: any) => {
 		<>
 			<Background />
 			<div className={classes.weatherInfo}>
-				<Title city={state.city} country={state.country} date={dateСonversion(state.dt)} />
-				<div className={classes.weatherDescriptions}>
-					{!!state.success && renderWeatherParams()}
-				</div>
+				{!!weather.success
+					? <>
+						<Title city={weather.city} country={weather.country} date={dateСonversion(weather.dt)} />
+						<div className={classes.weatherDescriptions}>
+							{!!weather.success && renderWeatherParams()}
+						</div>
+					</>
+					: <p>Loading!</p>
+
+				}
+
 			</div>
 		</>
 	)
