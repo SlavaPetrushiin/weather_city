@@ -9,9 +9,10 @@ import { RootState } from '../../store/store';
 import classes from './CardCity.module.css';
 import { getParamsUrl } from '../../utilites/getParamsUrl';
 import SliderWeather from '../Slider/SliderWeather';
+import { RouteComponentProps } from 'react-router-dom';
 
-const CardCity = (props: any) => {
-	const params = props.location.search;
+const CardCity = ({location}: RouteComponentProps) => {
+	const params = location.search;
 	const paramsUrl = getParamsUrl(params);
 	const dispatch = useDispatch();
 	const current = useSelector((state: RootState) => state.card.current);

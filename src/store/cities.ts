@@ -34,7 +34,7 @@ type IGetLocalCitiesSuccess = {
 	favorites: Array<ICity>
 }
 
-type IInitialState = {
+type InitialStateType = {
 	foundCities: Array<ICity>
 	favorites: Array<ICity>
 	error: boolean
@@ -49,14 +49,14 @@ type IAllTypes =
 
 export type IThunk = ThunkAction<void, RootState, unknown, IAllTypes>
 
-const initialState: IInitialState = {
+const initialState: InitialStateType = {
 	foundCities: [],
 	favorites: [],
 	error: false,
 	message: "Enter the correct name"
 };
 
-const cities = (state: IInitialState = initialState, action: IAllTypes): IInitialState => {
+const cities = (state: InitialStateType = initialState, action: IAllTypes): InitialStateType => {
 	switch (action.type) {
 		case FETCH_CITY_SUCCESS: {
 			return {
@@ -126,7 +126,6 @@ export const findCity = (letters: string): IThunk => async (dispatch) => {
 			dispatch(fetchFindCityError());
 			return
 		}
-		debugger
 
 		let citiesAndCountry = cities.map((city): ICity => {
 			return { 

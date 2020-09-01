@@ -3,7 +3,7 @@ import { Typeahead } from '@gforge/react-typeahead-ts';
 import Background from '../Background';
 import classes from './Search.module.css'
 import { useDispatch, useSelector } from 'react-redux';
-import { findCity, updateFavoritesCities, removeLocalFavoriteCity } from '../../store/cities';
+import { findCity, updateFavoritesCities, removeLocalFavoriteCity, ICity } from '../../store/cities';
 import { RootState } from '../../store/store';
 import ListCities from '../ListCities/ListCities';
 
@@ -13,6 +13,15 @@ const Search = () => {
 	const foundCities = useSelector((state: RootState) => state.cities);
 	const favoritesCities = useSelector((state: RootState) => state.cities.favorites);
 	const citiesForTypeahead = foundCities.foundCities.map((city: any) => `${city.city}, ${city.country}`);
+
+	const renderFavoritesCities = foundCities.favorites.filter((city: ICity) => {
+		if(!!value && city.city.toLocaleLowerCase().includes(value.toLocaleLowerCase())){
+			return city
+		}
+		else if(!value){
+			return city
+		}	
+	})
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setValue(e.currentTarget.value);
@@ -52,7 +61,7 @@ const Search = () => {
 					clearOnSelection={true}
 				/>
 				<ListCities 
-					favoritesCities={favoritesCities}
+					favoritesCities={renderFavoritesCities}
 					removeFavoriteCity={removeFavoriteCity}
 				/>
 			</div>

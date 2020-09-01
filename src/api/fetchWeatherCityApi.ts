@@ -61,7 +61,8 @@ export type getWeatherCityType = {
 
 const fetchWeatherCity = {
 	getWeatherCity(city: string, country: string) {
-		return instance.get<getWeatherCityType>(`/weather?q=${city},${country}&appid=${process.env.REACT_APP_NOT_SECRET_CODE}&units=metric`).then(r => r.data)
+		return instance.get<getWeatherCityType>(`/weather?q=${city},${country}&appid=${process.env.REACT_APP_NOT_SECRET_CODE}&units=metric`)
+		.then(r => r.data)
 	},
 	getDailyWeatherCity(lat: string, lon: string) {
 		return instance.get<{ daily: Array<DailyWeatherType> }>(`onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly,current&appid=${process.env.REACT_APP_NOT_SECRET_CODE}`).then(r => r.data)
