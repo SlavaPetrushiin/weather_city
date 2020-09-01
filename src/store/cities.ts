@@ -160,7 +160,7 @@ export const updateFavoritesCities = (city: string): IThunk => async (dispatch, 
 
 		let newFavoritesCities = favoritesCities.concat(favorite).sort(favoriteCitySort);
 		dispatch(citySelectedSuccess(newFavoritesCities));
-		storageApi.saveFavorites(newFavoritesCities);
+		storageApi.saveCity(newFavoritesCities);
 	}
 	catch (e) {
 		console.log(e)
@@ -169,7 +169,7 @@ export const updateFavoritesCities = (city: string): IThunk => async (dispatch, 
 
 export const getLocalFavoritesCities = (): IThunk => async (dispatch) => {
 	try {
-		let localFavoritesCities = await storageApi.getFavorites();
+		let localFavoritesCities = await storageApi.getCities();
 		dispatch(getLocalCitiesSuccess(localFavoritesCities));
 	}
 	catch (e) {
@@ -182,7 +182,7 @@ export const removeLocalFavoriteCity = (id: string): IThunk => async (dispatch, 
 		let favoritesCities = getState().cities.favorites;
 		let newFavoritesCities = favoritesCities.filter((favorite: ICity) => favorite.id !== id);
 		dispatch(citySelectedSuccess(newFavoritesCities));
-		storageApi.removeImage(id);
+		storageApi.removeCity(id);
 	}
 	catch (e) {
 		console.log(e)

@@ -7,7 +7,6 @@ type IGetParamsUrl = {
 
 export const getParamsUrl = (paramsString: string): IGetParamsUrl => {
 	let searchParams = new URLSearchParams(paramsString);
-
 	let city = searchParams.get("city");
 	let country = searchParams.get("country");
 	let lat = searchParams.get("lat");

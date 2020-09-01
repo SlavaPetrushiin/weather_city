@@ -1,4 +1,13 @@
-export const dateСonversion = (value: any) => {
+type IDate = {
+	day: string
+	month: string
+	year: number
+	hour: number
+	minute: number
+	numberOfMonths: number
+}
+
+export const dateСonversion = (value: any): IDate => {
 	let months = [
 		'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
 	]
