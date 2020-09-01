@@ -1,5 +1,13 @@
 .slider{
-	display: flex;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+
+  width: 375px;
+}
+
+.slider::-webkit-scrollbar {
+  display: none;
 }
 
 .dayWeek {
@@ -20,6 +28,11 @@
 	align-items: center;
 }
 
+.dayWeek span{
+	display: inline-block;
+	margin-bottom: 4px;
+}
+
 .slideImg{
 	width: 24px;
 	height: 24px;
@@ -30,5 +43,10 @@
 }
 
 .temperatureDay{
-
+	font-weight: 500;
+	font-size: 8px;
+	line-height: 10px;
+	
+	text-align: center;
+	letter-spacing: 0.1em;	
 }

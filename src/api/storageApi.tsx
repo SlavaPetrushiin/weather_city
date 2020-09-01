@@ -5,7 +5,7 @@ const storageApi = {
 		favorites: "favorites"
 	},
 
-	getFavorites() {
+	getCities() {
 		if (!localStorage.getItem(this.KEYS.favorites)) {
 			localStorage.setItem("favorites", JSON.stringify([]));
 			return false;
@@ -14,14 +14,14 @@ const storageApi = {
 		return favorites;
 	},
 
-	saveFavorites(favoritesCities: Array<ICity>) {
-		if (!!this.getFavorites()) {
+	saveCity(favoritesCities: Array<ICity>) {
+		if (!!this.getCities()) {
 			localStorage.setItem(this.KEYS.favorites, JSON.stringify(favoritesCities));
 		}
 	},
 
-	removeImage(id: string) {
-		const favorites = this.getFavorites();
+	removeCity(id: string) {
+		const favorites = this.getCities();
 		const newFavorites = favorites.filter((favorite: any) => favorite.id !== id);
 		localStorage.setItem(this.KEYS.favorites, JSON.stringify(newFavorites));
 	}
