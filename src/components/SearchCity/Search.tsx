@@ -14,7 +14,7 @@ const Search = () => {
 	const favoritesCities = useSelector((state: RootState) => state.cities.favorites);
 	const citiesForTypeahead = foundCities.foundCities.map((city: any) => `${city.city}, ${city.country}`);
 
-	const renderFavoritesCities = foundCities.favorites.filter((city: ICity) => {
+	const renderFavoritesCities = favoritesCities.filter((city: ICity) => {
 		if(!!value && city.city.toLocaleLowerCase().includes(value.toLocaleLowerCase())){
 			return city
 		}
