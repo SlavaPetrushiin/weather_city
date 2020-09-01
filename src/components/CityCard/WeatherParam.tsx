@@ -99,7 +99,7 @@ const WeatherParam = (props: IProps) => {
 		<div className={classes.weatherDescription}>
 			{
 				props.name !== 'temperature' && typeof props.description !== 'object' && <span className={classes.blockIconImg}>
-					<img src={iconSrc} />
+					<img src={iconSrc} alt="icon"/>
 				</span>
 			}
 			{tem}

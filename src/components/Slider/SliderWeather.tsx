@@ -7,6 +7,12 @@ import { DailyWeatherType } from '../../store/weatherCity';
 import { getCelsiusDegree } from '../../utilites/getCelsiusDegree';
 import { dateСonversion } from '../../utilites/dateСonversion';
 
+enum SlideParamEnum  {
+	Clouds = 'Clouds',
+	Rain = 'Rain',
+	Clear = 'Clear',
+}
+
 const Slide = (props: any) => {
 	const day = props.day;
 	const date = dateСonversion(props.day.dt);
@@ -14,15 +20,15 @@ const Slide = (props: any) => {
 
 	let iconSrc;
 	switch (day.weather[0].main) {
-		case "Clouds": {
+		case SlideParamEnum.Clouds: {
 			iconSrc = clouds;
 			break;
 		}
-		case "Rain": {
+		case SlideParamEnum.Rain: {
 			iconSrc = rain;
 			break;
 		}
-		case "Clear": {
+		case SlideParamEnum.Clear: {
 			iconSrc = sunny;
 			break;
 		}
@@ -51,7 +57,7 @@ const Slide = (props: any) => {
 const SliderWeather = (props: any) => {
 	const daily = props.daily;
 	const renderSlides = () => {
-		return daily.map((d: DailyWeatherType) => <Slide day={d}/>)
+		return daily.map((d: DailyWeatherType, i: number) => <Slide day={d} key={i}/>)
 	}
 
 	return (

@@ -99,7 +99,7 @@ export const fetchGetWeatherCity = (city: string, country: string, lat: string, 
 			fetchWeatherCity.getWeatherCity(city, country),
 			fetchWeatherCity.getDailyWeatherCity(lat, lon),
 		]);
-debugger
+
 		let current = result[0];
 		let daily = result[1].daily;
 
