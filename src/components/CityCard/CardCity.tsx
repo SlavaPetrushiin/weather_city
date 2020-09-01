@@ -3,7 +3,7 @@ import WeatherParam from './WeatherParam';
 import Background from '../Background';
 import Title from './Title';
 import { dateСonversion } from '../../utilites/dateСonversion';
-import { fetchGetWeatherCity, ICurrentWeather } from '../../store/weatherCity';
+import { fetchGetWeatherCity, CurrentWeatherType } from '../../store/weatherCity';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import classes from './CardCity.module.css';
@@ -24,7 +24,7 @@ const CardCity = (props: any) => {
 	}, [])
 
 	const renderWeatherParams = () => {
-		let keys = (Object.keys(current) as Array<keyof ICurrentWeather>).map(key => key);
+		let keys = (Object.keys(current) as Array<keyof CurrentWeatherType>).map(key => key);
 		let keysForRender = keys.filter((key) => key !== "success" && key !== "city" && key !== "country" && key !== "error" && key !== "dt");
 		let resultParams = keysForRender.map(key => <WeatherParam key={key} name={key} description={current[key]} />);
 

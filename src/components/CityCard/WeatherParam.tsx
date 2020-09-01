@@ -7,57 +7,69 @@ import cloud from '../../img/vector_cloud.png';
 import clock from '../../img/sand-clock.png';
 import sunrise from '../../img/sunrise.png';
 import sunset from '../../img/sunset.png';
-import { ITemperatureChange } from '../../store/weatherCity';
+import { TemperatureChangeType } from '../../store/weatherCity';
 import classes from './CardCity.module.css';
 
 type IProps = {
 	name: string
-	description: string | boolean | undefined | number | ITemperatureChange
+	description: string | boolean | undefined | number | TemperatureChangeType
+}
+
+enum WeatherParamEnum  {
+	pressure = 'pressure',
+	humidity = 'humidity',
+	wind = 'wind',
+	clouds = 'clouds',
+	daytime = 'daytime',
+	sunrise = 'sunrise',
+	sunset = 'sunset',
+	description = 'description',
+	temperature = 'temperature'
 }
 
 const WeatherParam = (props: IProps) => {
 	let iconSrc, unit;
 	let cls = [];
 	switch (props.name) {
-		case "pressure": {
+		case WeatherParamEnum.pressure: {
 			iconSrc = barometer;
 			unit = "mBar";
 			break;
 		}
-		case "humidity": {
+		case WeatherParamEnum.humidity: {
 			iconSrc = humidity;
 			unit = "%";
 			break;
 		}
-		case "wind": {
+		case WeatherParamEnum.wind: {
 			iconSrc = wind;
 			unit = "km/h";
 			break;
 		}
-		case "clouds": {
+		case WeatherParamEnum.clouds: {
 			iconSrc = cloud;
 			break;
 		}
-		case "daytime": {
+		case WeatherParamEnum.daytime: {
 			iconSrc = clock;
 			unit = "H";
 			break;
 		}
-		case "sunrise": {
+		case WeatherParamEnum.sunrise: {
 			iconSrc = sunrise;
 			unit = "AM";
 			break;
 		}
-		case "sunset": {
+		case WeatherParamEnum.sunset: {
 			iconSrc = sunset;
 			unit = "PM";
 			break;
 		}
-		case "description": {
+		case WeatherParamEnum.description: {
 			iconSrc = vector;
 			break;
 		}
-		case "temperature": {
+		case WeatherParamEnum.temperature: {
 			cls.push(`${classes.degrees}`);
 			break;
 		}

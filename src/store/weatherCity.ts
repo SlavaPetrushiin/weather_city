@@ -4,12 +4,12 @@ import { FETCH_WEATHER_SUCCESS } from './type';
 import fetchWeatherCity from '../api/fetchWeatherCityApi';
 import { dateСonversion } from '../utilites/dateСonversion';
 
-export type ITemperatureChange = {
+export type TemperatureChangeType = {
 	temp_min: number
 	temp_max: number
 }
 
-export type IDailyWeather = {
+export type DailyWeatherType = {
 	dt: undefined | string
 	daytime: undefined | string
 	temp_min: number
@@ -17,26 +17,26 @@ export type IDailyWeather = {
 	temp_day: number
 }
 
-export type ICurrentWeather = {
+export type CurrentWeatherType = {
 	success: boolean
 	description: undefined | string
 	temperature: undefined | number
-	temperatureChange: undefined | ITemperatureChange
+	temperatureChange: undefined | TemperatureChangeType
 	city: undefined | string
 	country: undefined | string
-	humidity: undefined | string
-	pressure: undefined | string
-	wind: undefined | string
+	humidity: undefined | number
+	pressure: undefined | number
+	wind: undefined | number
 	sunrise: undefined | string
 	sunset: undefined | string
 	daytime: undefined | string
-	dt: undefined | string
+	dt: undefined | number
 	error: undefined | string
 }
 
 type IState = {
-	daily: Array<IDailyWeather>
-	current: ICurrentWeather
+	daily: Array<DailyWeatherType>
+	current: CurrentWeatherType
 }
 
 const initialState: IState = {
@@ -59,17 +59,17 @@ const initialState: IState = {
 	}
 }
 
-type IFetchWeatherSuccess = {
+type FetchWeatherSuccessType = {
 	type: typeof FETCH_WEATHER_SUCCESS
-	current: ICurrentWeather
-	daily: Array<IDailyWeather>
+	current: CurrentWeatherType
+	daily: Array<DailyWeatherType>
 }
 
-type IAllTypes = IFetchWeatherSuccess
+type AllTypes = FetchWeatherSuccessType
 
-export type IThunk = ThunkAction<void, RootState, unknown, IAllTypes>
+export type IThunk = ThunkAction<void, RootState, unknown, AllTypes>
 
-const weatherCity = (state: IState = initialState, action: IAllTypes): IState => {
+const weatherCity = (state: IState = initialState, action: AllTypes): IState => {
 	switch(action.type){
 		case FETCH_WEATHER_SUCCESS:{
 			return {
@@ -84,7 +84,7 @@ const weatherCity = (state: IState = initialState, action: IAllTypes): IState =>
 	}
 };
 
-const fetchWeatherCitySuccess = (current: ICurrentWeather, daily: Array<IDailyWeather>): IFetchWeatherSuccess => {
+const fetchWeatherCitySuccess = (current: CurrentWeatherType, daily: Array<DailyWeatherType>): FetchWeatherSuccessType => {
 	return {
 		type: FETCH_WEATHER_SUCCESS,
 		current,
@@ -99,8 +99,8 @@ export const fetchGetWeatherCity = (city: string, country: string, lat: string, 
 			fetchWeatherCity.getWeatherCity(city, country),
 			fetchWeatherCity.getDailyWeatherCity(lat, lon),
 		]);
-
-		let current = result[0].data;
+debugger
+		let current = result[0];
 		let daily = result[1].daily;
 
 		let newCurrent = {
@@ -131,3 +131,4 @@ export const fetchGetWeatherCity = (city: string, country: string, lat: string, 
 }
 
 export default weatherCity;
+

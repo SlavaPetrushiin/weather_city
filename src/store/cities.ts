@@ -121,13 +121,14 @@ const getLocalCitiesSuccess = (favorites: Array<ICity>): IGetLocalCitiesSuccess 
 export const findCity = (letters: string): IThunk => async (dispatch) => {
 	try {
 		let result = await fetchWeatherCity.findCity(letters);
-		let cities = result.data.list;
+		let cities = result.list;
 		if(cities.length === 0) {
 			dispatch(fetchFindCityError());
 			return
 		}
+		debugger
 
-		let citiesAndCountry = cities.map((city: any): ICity => {
+		let citiesAndCountry = cities.map((city): ICity => {
 			return { 
 				city: city.name,
 				country: city.sys.country,

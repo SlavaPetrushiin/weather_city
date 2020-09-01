@@ -3,7 +3,7 @@ import classes from './SliderWeather.module.css'
 import rain from '../../img/rain.png'
 import clouds from '../../img/vector_cloud.png';
 import sunny from '../../img/sunny.png' 
-import { IDailyWeather } from '../../store/weatherCity';
+import { DailyWeatherType } from '../../store/weatherCity';
 import { getCelsiusDegree } from '../../utilites/getCelsiusDegree';
 import { dateСonversion } from '../../utilites/dateСonversion';
 
@@ -51,7 +51,7 @@ const Slide = (props: any) => {
 const SliderWeather = (props: any) => {
 	const daily = props.daily;
 	const renderSlides = () => {
-		return daily.map((d: IDailyWeather) => <Slide day={d}/>)
+		return daily.map((d: DailyWeatherType) => <Slide day={d}/>)
 	}
 
 	return (

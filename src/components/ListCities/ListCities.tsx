@@ -28,7 +28,7 @@ const ListCities = ({ favoritesCities, removeFavoriteCity }: IProps) => {
 			)
 		})
 	}
-
+debugger
 	return (
 		<ul className={classes.listCities}>
 			{
