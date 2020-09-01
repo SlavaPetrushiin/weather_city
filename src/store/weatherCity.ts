@@ -9,11 +9,15 @@ export type ITemperatureChange = {
 	temp_max: number
 }
 
-export type IDaily = {
-
+export type IDailyWeather = {
+	dt: undefined | string
+	daytime: undefined | string
+	temp_min: number
+	temp_max: number
+	temp_day: number
 }
 
-export type IStateWeather = {
+export type ICurrentWeather = {
 	success: boolean
 	description: undefined | string
 	temperature: undefined | number
@@ -30,38 +34,48 @@ export type IStateWeather = {
 	error: undefined | string
 }
 
-const initialState: IStateWeather = {
-	success: false,
-	description: undefined,
-	temperature: undefined,
-	temperatureChange: undefined,
-	city: undefined,
-	country: undefined,
-	humidity: undefined,
-	pressure: undefined,
-	wind: undefined,
-	sunrise: undefined,
-	sunset: undefined,
-	daytime: undefined,
-	dt: undefined,
-	error: undefined,
+type IState = {
+	daily: Array<IDailyWeather>
+	current: ICurrentWeather
+}
+
+const initialState: IState = {
+	daily: [],
+	current: {
+		success: false,
+		description: undefined,
+		temperature: undefined,
+		temperatureChange: undefined,
+		city: undefined,
+		country: undefined,
+		humidity: undefined,
+		pressure: undefined,
+		wind: undefined,
+		sunrise: undefined,
+		sunset: undefined,
+		daytime: undefined,
+		dt: undefined,
+		error: undefined,
+	}
 }
 
 type IFetchWeatherSuccess = {
 	type: typeof FETCH_WEATHER_SUCCESS
-	weather: IStateWeather
+	current: ICurrentWeather
+	daily: Array<IDailyWeather>
 }
 
 type IAllTypes = IFetchWeatherSuccess
 
 export type IThunk = ThunkAction<void, RootState, unknown, IAllTypes>
 
-const weatherCity = (state: IStateWeather = initialState, action: IAllTypes): IStateWeather => {
+const weatherCity = (state: IState = initialState, action: IAllTypes): IState => {
 	switch(action.type){
 		case FETCH_WEATHER_SUCCESS:{
 			return {
 				...state,
-				...action.weather
+				current: {...action.current},
+				daily: [...state.daily, ...action.daily]
 			}
 		} 
 		default: {
@@ -70,14 +84,16 @@ const weatherCity = (state: IStateWeather = initialState, action: IAllTypes): IS
 	}
 };
 
-const fetchWeatherCitySuccess = (data: IStateWeather): IFetchWeatherSuccess => {
+const fetchWeatherCitySuccess = (current: ICurrentWeather, daily: Array<IDailyWeather>): IFetchWeatherSuccess => {
 	return {
 		type: FETCH_WEATHER_SUCCESS,
-		weather: data
+		current,
+		daily
 	}
 }
 
 export const fetchGetWeatherCity = (city: string, country: string, lat: string, lon: string) : IThunk => async(dispatch) => {
+
 	try{
 		let result = await Promise.all([
 			fetchWeatherCity.getWeatherCity(city, country),
@@ -85,9 +101,7 @@ export const fetchGetWeatherCity = (city: string, country: string, lat: string, 
 		]);
 
 		let current = result[0].data;
-		let daily = result[1].data;
-
-		debugger
+		let daily = result[1].daily;
 
 		let newCurrent = {
 			success: true,
@@ -109,7 +123,7 @@ export const fetchGetWeatherCity = (city: string, country: string, lat: string, 
 			error: undefined
 		}
 
-		dispatch(fetchWeatherCitySuccess(newCurrent));
+		dispatch(fetchWeatherCitySuccess(newCurrent, daily));
 	}
 	catch(e){
 		console.log(e)
