@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Typeahead } from '@gforge/react-typeahead-ts';
 import Background from '../Background';
 import classes from './Search.module.css'
 import { useDispatch, useSelector } from 'react-redux';
-import { findCity, updateFavoritesCities, removeLocalFavoriteCity, ICity } from '../../store/cities';
+import { findCity, updateFavoritesCities, removeLocalFavoriteCity, ICity, updateTemperatureByReload } from '../../store/cities';
 import { RootState } from '../../store/store';
 import ListCities from '../ListCities/ListCities';
 
@@ -14,13 +14,16 @@ const Search = () => {
 	const favoritesCities = useSelector((state: RootState) => state.cities.favorites);
 	const citiesForTypeahead = foundCities.foundCities.map((city: any) => `${city.city}, ${city.country}`);
 
-	const renderFavoritesCities = favoritesCities.filter((city: ICity) => {
-		if(!!value && city.city.toLocaleLowerCase().includes(value.toLocaleLowerCase())){
+	useEffect(() => {
+		dispatch(updateTemperatureByReload())
+	}, [])
+
+	const renderFavoritesCities = () =>  favoritesCities.filter((city: ICity) => {
+		let coincidence = city.city.toLocaleLowerCase().includes(value.toLocaleLowerCase())
+		if(!!value && coincidence){
 			return city
 		}
-		else if(!value){
-			return city
-		}	
+		if(!value) return city
 	})
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,6 +37,7 @@ const Search = () => {
 	};
 
 	const handleOptionSelected = (city: any) => {
+		setValue('');
 		dispatch(updateFavoritesCities(city));
 	}
 

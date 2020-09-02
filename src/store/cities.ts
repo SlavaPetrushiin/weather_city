@@ -1,3 +1,4 @@
+import { FindCityType } from './../api/fetchWeatherCityApi';
 import { RootState } from './store';
 import { v4 as uuidv4 } from 'uuid';
 import { ThunkAction } from 'redux-thunk';
@@ -118,6 +119,19 @@ const getLocalCitiesSuccess = (favorites: Array<ICity>): IGetLocalCitiesSuccess 
 	}
 }
 
+function createArrCities(cities: Array<FindCityType>){
+	return cities.map((city): ICity => {
+		return { 
+			city: city.name,
+			country: city.sys.country,
+			temperature: Math.round(city.main.temp),
+			id: uuidv4(),
+			lat: city.coord.lat,
+			lon: city.coord.lon
+		}
+	})
+}
+
 export const findCity = (letters: string): IThunk => async (dispatch) => {
 	try {
 		let result = await fetchWeatherCity.findCity(letters);
@@ -127,16 +141,7 @@ export const findCity = (letters: string): IThunk => async (dispatch) => {
 			return
 		}
 
-		let citiesAndCountry = cities.map((city): ICity => {
-			return { 
-				city: city.name,
-				country: city.sys.country,
-				temperature: Math.round(city.main.temp),
-				id: uuidv4(),
-				lat: city.coord.lat,
-				lon: city.coord.lon
-			}
-		})
+		let citiesAndCountry = createArrCities(cities);
 
 		dispatch(fetchFindCitySuccess(citiesAndCountry))
 	}
@@ -189,6 +194,17 @@ export const removeLocalFavoriteCity = (id: string): IThunk => async (dispatch, 
 	}
 }
 
+export const updateTemperatureByReload = (): IThunk => async (dispatch) =>  {
+	try{
+		let favoritesCities = storageApi.getCities();
+		let result = await Promise.all(favoritesCities.map((city: ICity) => fetchWeatherCity.getWeatherCity(city.city, city.country)));
+		let cities = createArrCities(result as Array<FindCityType>);
+		dispatch(citySelectedSuccess(cities));
+		storageApi.updateCites(cities);
+	}
+	catch(e){
+		console.log(e)
+	}
+}
+
 export default cities;
-
-

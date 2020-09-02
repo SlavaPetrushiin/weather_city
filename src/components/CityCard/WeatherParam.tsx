@@ -92,7 +92,7 @@ const WeatherParam = (props: IProps) => {
 		)
 
 	let tem = props.name === 'temperature'
-		? <span className={cls.join(' ')}>{desc}<span className={classes.tem}>&#176;C</span></span>
+		? <span className={cls.join(' ')}>{desc}<span className={classes.tem}> &#176;C</span></span>
 		: <>{desc}</>
 
 	return (

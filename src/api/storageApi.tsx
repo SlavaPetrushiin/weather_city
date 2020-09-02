@@ -24,6 +24,11 @@ const storageApi = {
 		const favorites = this.getCities();
 		const newFavorites = favorites.filter((favorite: any) => favorite.id !== id);
 		localStorage.setItem(this.KEYS.favorites, JSON.stringify(newFavorites));
+	},
+
+	updateCites(favoritesCities: Array<ICity>) {
+		localStorage.removeItem(this.KEYS.favorites);
+		localStorage.setItem(this.KEYS.favorites, JSON.stringify(favoritesCities));
 	}
 };
 
