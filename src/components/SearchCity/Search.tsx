@@ -12,7 +12,7 @@ const Search = () => {
 	const [value, setValue] = useState('');
 	const foundCities = useSelector((state: RootState) => state.cities);
 	const favoritesCities = useSelector((state: RootState) => state.cities.favorites);
-	const citiesForTypeahead = foundCities.foundCities.map((city: any) => `${city.city}, ${city.country}`);
+	const citiesForTypeahead = foundCities.foundCities.map((city) => `${city.city}, ${city.country}`);
 
 	useEffect(() => {
 		dispatch(updateTemperatureByReload())
