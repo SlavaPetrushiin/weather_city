@@ -1,5 +1,5 @@
 import { FindCityType } from './../api/fetchWeatherCityApi';
-import { RootState } from './store';
+import { RootState, InferActionsTypes } from './store';
 import { v4 as uuidv4 } from 'uuid';
 import { ThunkAction } from 'redux-thunk';
 import { FETCH_CITY_SUCCESS, CITY_SELECTED_SUCCESS, GET_LOCAL_CITY_SUCCESS, FETCH_CITY_ERROR } from "./type";
@@ -16,45 +16,17 @@ export type ICity = {
 	lon?: number
 }
 
-type IFetchCitySuccess = {
-	type: typeof FETCH_CITY_SUCCESS
-	foundCities: Array<ICity> | []
-}
-
-type IFetchCityError = {
-	type: typeof FETCH_CITY_ERROR
-}
-
-type ICitySelectedSuccess = {
-	type: typeof CITY_SELECTED_SUCCESS
-	favorites: Array<ICity>
-}
-
-type IGetLocalCitiesSuccess = {
-	type: typeof GET_LOCAL_CITY_SUCCESS
-	favorites: Array<ICity>
-}
-
-type InitialStateType = {
-	foundCities: Array<ICity>
-	favorites: Array<ICity>
-	error: boolean
-	message: string
-}
-
-type IAllTypes = 
-	IFetchCitySuccess
-	| IFetchCityError
-	| ICitySelectedSuccess
-	| IGetLocalCitiesSuccess
+type IAllTypes = InferActionsTypes<typeof actions>;
 
 export type IThunk = ThunkAction<void, RootState, unknown, IAllTypes>
 
-const initialState: InitialStateType = {
-	foundCities: [],
-	favorites: [],
-	error: false,
-	message: "Enter the correct name"
+type InitialStateType = typeof initialState
+
+const initialState = {
+	foundCities: [] as ICity[],
+	favorites: [] as ICity[],
+	error: false as boolean,
+	message: "Enter the correct name" as string
 };
 
 const cities = (state: InitialStateType = initialState, action: IAllTypes): InitialStateType => {
@@ -92,34 +64,14 @@ const cities = (state: InitialStateType = initialState, action: IAllTypes): Init
 	}
 };
 
-const citySelectedSuccess = (favorites: Array<ICity>): ICitySelectedSuccess => {
-	return {
-		type: CITY_SELECTED_SUCCESS,
-		favorites
-	}
+export const actions = {
+	citySelectedSuccess: (favorites: ICity[]) => ({type: CITY_SELECTED_SUCCESS, favorites} as const),
+	fetchFindCitySuccess: (foundCities: ICity[]) => ({type: FETCH_CITY_SUCCESS, foundCities} as const),
+	fetchFindCityError: () => ({type: FETCH_CITY_ERROR} as const),
+	getLocalCitiesSuccess: (favorites: Array<ICity>) => ({type: GET_LOCAL_CITY_SUCCESS,favorites} as const)
 }
 
-const fetchFindCitySuccess = (foundCities: Array<ICity>): IFetchCitySuccess => {
-	return {
-		type: FETCH_CITY_SUCCESS,
-		foundCities
-	}
-}
-
-const fetchFindCityError = (): IFetchCityError => {
-	return {
-		type: FETCH_CITY_ERROR,
-	}
-}
-
-const getLocalCitiesSuccess = (favorites: Array<ICity>): IGetLocalCitiesSuccess => {
-	return {
-		type: GET_LOCAL_CITY_SUCCESS,
-		favorites
-	}
-}
-
-function createArrCities(cities: Array<FindCityType>){
+function createArrCities<T extends Array<FindCityType>>(cities: T): Array<ICity>{
 	return cities.map((city): ICity => {
 		return { 
 			city: city.name,
@@ -137,13 +89,13 @@ export const findCity = (letters: string): IThunk => async (dispatch) => {
 		let result = await fetchWeatherCity.findCity(letters);
 		let cities = result.list;
 		if(cities.length === 0) {
-			dispatch(fetchFindCityError());
+			dispatch(actions.fetchFindCityError());
 			return
 		}
 
 		let citiesAndCountry = createArrCities(cities);
 
-		dispatch(fetchFindCitySuccess(citiesAndCountry))
+		dispatch(actions.fetchFindCitySuccess(citiesAndCountry))
 	}
 	catch (e) {
 		console.log(e)
@@ -164,7 +116,7 @@ export const updateFavoritesCities = (city: string): IThunk => async (dispatch, 
 		})
 
 		let newFavoritesCities = favoritesCities.concat(favorite).sort(favoriteCitySort);
-		dispatch(citySelectedSuccess(newFavoritesCities));
+		dispatch(actions.citySelectedSuccess(newFavoritesCities));
 		storageApi.saveCity(newFavoritesCities);
 	}
 	catch (e) {
@@ -175,7 +127,7 @@ export const updateFavoritesCities = (city: string): IThunk => async (dispatch, 
 export const getLocalFavoritesCities = (): IThunk => async (dispatch) => {
 	try {
 		let localFavoritesCities = await storageApi.getCities();
-		dispatch(getLocalCitiesSuccess(localFavoritesCities));
+		dispatch(actions.getLocalCitiesSuccess(localFavoritesCities));
 	}
 	catch (e) {
 		console.log(e)
@@ -186,7 +138,7 @@ export const removeLocalFavoriteCity = (id: string): IThunk => async (dispatch, 
 	try {
 		let favoritesCities = getState().cities.favorites;
 		let newFavoritesCities = favoritesCities.filter((favorite: ICity) => favorite.id !== id);
-		dispatch(citySelectedSuccess(newFavoritesCities));
+		dispatch(actions.citySelectedSuccess(newFavoritesCities));
 		storageApi.removeCity(id);
 	}
 	catch (e) {
@@ -199,7 +151,7 @@ export const updateTemperatureByReload = (): IThunk => async (dispatch) =>  {
 		let favoritesCities = storageApi.getCities();
 		let result = await Promise.all(favoritesCities.map((city: ICity) => fetchWeatherCity.getWeatherCity(city.city, city.country)));
 		let cities = createArrCities(result as Array<FindCityType>);
-		dispatch(citySelectedSuccess(cities));
+		dispatch(actions.citySelectedSuccess(cities));
 		storageApi.updateCites(cities);
 	}
 	catch(e){

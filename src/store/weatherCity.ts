@@ -1,4 +1,4 @@
-import { RootState } from './store';
+import { RootState, InferActionsTypes } from './store';
 import { ThunkAction } from 'redux-thunk';
 import { FETCH_WEATHER_SUCCESS } from './type';
 import fetchWeatherCity from '../api/fetchWeatherCityApi';
@@ -34,40 +34,31 @@ export type CurrentWeatherType = {
 	error: undefined | string
 }
 
-type IState = {
-	daily: Array<DailyWeatherType>
-	current: CurrentWeatherType
-}
+type IState = typeof initialState
 
-const initialState: IState = {
-	daily: [],
-	current: {
-		success: false,
-		description: undefined,
-		temperature: undefined,
-		temperatureChange: undefined,
-		city: undefined,
-		country: undefined,
-		humidity: undefined,
-		pressure: undefined,
-		wind: undefined,
-		sunrise: undefined,
-		sunset: undefined,
-		daytime: undefined,
-		dt: undefined,
-		error: undefined,
-	}
-}
-
-type FetchWeatherSuccessType = {
-	type: typeof FETCH_WEATHER_SUCCESS
-	current: CurrentWeatherType
-	daily: Array<DailyWeatherType>
-}
-
-type AllTypes = FetchWeatherSuccessType
+type AllTypes = InferActionsTypes<typeof actions>
 
 export type IThunk = ThunkAction<void, RootState, unknown, AllTypes>
+
+const initialState = {
+	daily: [] as DailyWeatherType[],
+	current: {
+		success: false as boolean,
+		description: undefined as undefined | string,
+		temperature: undefined as undefined | number,
+		temperatureChange: undefined as undefined | TemperatureChangeType,
+		city: undefined as undefined | string,
+		country: undefined as undefined | string,
+		humidity: undefined as  undefined | number,
+		pressure: undefined as  undefined | number,
+		wind: undefined as  undefined | number,
+		sunrise: undefined as undefined | string,
+		sunset: undefined as undefined | string,
+		daytime: undefined as undefined | string,
+		dt: undefined as undefined | number,
+		error: undefined as undefined | string,
+	}
+}
 
 const weatherCity = (state: IState = initialState, action: AllTypes): IState => {
 	switch(action.type){
@@ -84,12 +75,12 @@ const weatherCity = (state: IState = initialState, action: AllTypes): IState => 
 	}
 };
 
-const fetchWeatherCitySuccess = (current: CurrentWeatherType, daily: Array<DailyWeatherType>): FetchWeatherSuccessType => {
-	return {
+const actions = {
+	fetchWeatherCitySuccess : (current: CurrentWeatherType, daily: Array<DailyWeatherType>) => ({
 		type: FETCH_WEATHER_SUCCESS,
 		current,
 		daily
-	}
+	} as const)
 }
 
 export const fetchGetWeatherCity = (city: string, country: string, lat: string, lon: string) : IThunk => async(dispatch) => {
@@ -123,7 +114,7 @@ export const fetchGetWeatherCity = (city: string, country: string, lat: string, 
 			error: undefined
 		}
 
-		dispatch(fetchWeatherCitySuccess(newCurrent, daily));
+		dispatch(actions.fetchWeatherCitySuccess(newCurrent, daily));
 	}
 	catch(e){
 		console.log(e)
